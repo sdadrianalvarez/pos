@@ -39,14 +39,14 @@ odoo.define('pos_cash_in_out_odoo.pos', function(require) {
 
 		renderElement: function() {
 			var self = this;
-			this._super();	
+			this._super();
 			$('#error').hide();
 		},
 
 		save_summary_details: function(operation, entered_reason, entered_amount){
 			var self = this;
 			this.gui.close_popup();
-			self.gui.show_screen('cash_in_out_receipt_screen_widget',{ 
+			self.gui.show_screen('cash_in_out_receipt_screen_widget',{
 												operation:operation,
 												purpose:entered_reason,
 												amount:entered_amount});
@@ -91,9 +91,9 @@ odoo.define('pos_cash_in_out_odoo.pos', function(require) {
 							'body': _t('There is no cash register for this PoS Session'),
 						});
 					}
-										
+
 				});
-				
+
 			}
 		},
 
@@ -126,7 +126,7 @@ odoo.define('pos_cash_in_out_odoo.pos', function(require) {
 
 
 	// CashInPopupWidget Popup start
-
+/*
 	var CashInPopupWidget = popups.extend({
 		template: 'CashInPopupWidget',
 		init: function(parent, args) {
@@ -149,7 +149,7 @@ odoo.define('pos_cash_in_out_odoo.pos', function(require) {
 		save_summary_details: function(operation, entered_reason, entered_amount){
 			var self = this;
 			this.gui.close_popup();
-			self.gui.show_screen('cash_in_out_receipt_screen_widget',{ 
+			self.gui.show_screen('cash_in_out_receipt_screen_widget',{
 												operation:operation,
 												purpose:entered_reason,
 												amount:entered_amount});
@@ -161,6 +161,7 @@ odoo.define('pos_cash_in_out_odoo.pos', function(require) {
 		},
 		//
 
+
 		cash_in: function()
 		{
 			var self = this;
@@ -170,7 +171,7 @@ odoo.define('pos_cash_in_out_odoo.pos', function(require) {
 			var entered_reason = $("#inreason").val();
 			var entered_amount = $("#cash_amount").val();
 			var session_id = self.pos.pos_session.id;
-			
+
 			if(entered_amount == '')
 			{
 				$("#error").text("Please enter amount to withdraw");
@@ -194,7 +195,7 @@ odoo.define('pos_cash_in_out_odoo.pos', function(require) {
 				}).then(function(output) {
 					if (output == true){
 						self.save_summary_details('Put Money In', entered_reason,entered_amount)
-						
+
 					} else {
 						self.gui.show_popup('error', {
 							'title': _t('No Cash Register'),
@@ -202,7 +203,7 @@ odoo.define('pos_cash_in_out_odoo.pos', function(require) {
 						});
 					}
 				});
-			}	
+			}
 		},
 
 	});
@@ -229,15 +230,16 @@ odoo.define('pos_cash_in_out_odoo.pos', function(require) {
 			return true;
 		},
 	});
+*/
 
 	var CashInOutReceiptScreenWidget = screens.ScreenWidget.extend({
 		template: 'CashInOutReceiptScreenWidget',
 
 		init: function(parent, args) {
 			this._super(parent, args);
-			this.options = {};  
+			this.options = {};
 		},
-		
+
 		show: function(options){
 			var self = this;
 			this._super(options);
@@ -250,7 +252,7 @@ odoo.define('pos_cash_in_out_odoo.pos', function(require) {
 				}, 500);
 			}
 		},
-		
+
 		get_cash_receipt_render_env : function() {
 			return {
 				widget: this,
@@ -263,37 +265,37 @@ odoo.define('pos_cash_in_out_odoo.pos', function(require) {
 		cash_render_reciept: function(){
 			this.$('.pos-cash-receipt-container').html(QWeb.render('CashInOutReceipt', this.get_cash_receipt_render_env ()));
 		},
-		
+
 		print_xml_cash_receipt: function() {
 			var receipt = QWeb.render('CashInOutReceipt', this.get_cash_receipt_render_env ());
 			this.pos.proxy.print_receipt(receipt);
 		},
-		
+
 		print_web_cash_receipt: function() {
 			window.print();
 		},
-		
+
 		print_cash_receipt: function() {
 			var self = this;
-			if (!this.pos.config.iface_print_via_proxy) { 
+			if (!this.pos.config.iface_print_via_proxy) {
 
 				this.print_web_cash_receipt();
-			} else {    
+			} else {
 				this.print_xml_cash_receipt();
 			}
 		},
-		
+
 		renderElement: function() {
 			var self = this;
 			this._super();
-			
+
 			this.$('.next').click(function(){
 				self.gui.show_screen('products');
 			});
-			
+
 			this.$('.button.print-cash').click(function(){
 				self.print_cash_receipt();
-			}); 
+			});
 		},
 
 		should_auto_print: function() {
@@ -306,7 +308,7 @@ odoo.define('pos_cash_in_out_odoo.pos', function(require) {
 	});
 	// End CashInOutReceiptScreenWidget
 
-	
+
 	var CashInOutStatementButtonWidget = screens.ActionButtonWidget.extend({
 		template: 'CashInOutStatementButtonWidget',
 		button_click: function() {
@@ -392,9 +394,9 @@ odoo.define('pos_cash_in_out_odoo.pos', function(require) {
 
 		init: function(parent, args) {
 			this._super(parent, args);
-			this.options = {};	
+			this.options = {};
 		},
-		
+
 		show: function(options){
 			var self = this;
 			this._super(options);
@@ -407,7 +409,7 @@ odoo.define('pos_cash_in_out_odoo.pos', function(require) {
 				}, 500);
 			}
 		},
-		
+
 		get_product_receipt_render_env: function() {
 			return {
 				widget: this,
@@ -420,37 +422,37 @@ odoo.define('pos_cash_in_out_odoo.pos', function(require) {
 		product_render_reciept: function(){
 			this.$('.pos-statement-receipt-container').html(QWeb.render('StatementSummaryReceipt', this.get_product_receipt_render_env()));
 		},
-		
+
 		print_xml_product: function() {
 			var receipt = QWeb.render('StatementSummaryReceipt', this.get_product_receipt_render_env());
 			this.pos.proxy.print_receipt(receipt);
 		},
-		
+
 		print_web_product: function() {
 			window.print();
 		},
-		
+
 		print_product: function() {
 			var self = this;
-			if (!this.pos.config.iface_print_via_proxy) { 
+			if (!this.pos.config.iface_print_via_proxy) {
 
 				this.print_web_product();
-			} else {    
+			} else {
 				this.print_xml_product();
 			}
 		},
-		
+
 		renderElement: function() {
 			var self = this;
 			this._super();
-			
+
 			this.$('.next').click(function(){
 				self.gui.show_screen('products');
 			});
-			
+
 			this.$('.button.print-statement').click(function(){
 				self.print_product();
-			});	
+			});
 		},
 
 		should_auto_print: function() {
